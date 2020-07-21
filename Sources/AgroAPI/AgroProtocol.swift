@@ -50,7 +50,7 @@ public struct AgroPolygon: Codable {
         self.geo_json = Feature(type: "Feature", properties: prop, geometry: geom)
     }
     
-    /// check that the first and last positions of all polygons contain the same value.
+    /// check they are polygons and that the first and last positions of all polygons contain the same value.
     func isValidPoly() -> Bool {
         for coords in geo_json.geometry.coordinates {
             if coords.count < 3 { return false }
