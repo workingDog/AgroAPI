@@ -25,7 +25,7 @@ open class AgroProvider {
     }
     
     private func postThis(data: Data) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
-        return client.postThis(jsonData: data)
+        return client.postThis(bodyData: data)
     }
 
     /// send an Agro polygon to the server and return the server response
@@ -160,27 +160,50 @@ open class AgroProvider {
     }
     
     // update info for polygon   ---> todo
-    //    private func updateThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
-    //        return client.updateThis(param: param)
-    //    }
-    //
-    //    // update the Agro polygon from the server
-    //    open func updatePoly(id: String, reponse: Binding<AgroPolyResponse>) {
-    //        cancellable = updateThis(param: id)
-    //            .sink(receiveCompletion: { completion in
-    //                switch completion {
-    //                case .finished:
-    //                    break
-    //                case .failure(let error):
-    //                    print(error.localizedDescription)
-    //                }
-    //            }, receiveValue: { resp in
-    //                if let theResponse = resp {
-    //                    reponse.wrappedValue = theResponse
-    //                }
-    //            })
-    //    }
+    private func updateThis(id: String, name: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
+        let json = """
+        {
+           "geo_json": {
+              "something": "something"
+           },
+           "name": "\(name)"
+        }
+        """
+        let bodyData = json.data(using: .utf8)
+        return client.putThis(bodyData: bodyData!, param: id)
+    }
     
+    /// update the specific Agro polygon name on the server
+    ///
+    /// - Parameter id: the id of the polygon to change
+    /// - Parameter name: the new name of the polygon
+    /// - closure completion: AgroPolyResponse
+    open func updatePoly(id: String, name: String, reponse: Binding<AgroPolyResponse>) {
+        updatePoly(id: id, name: name) { resp in
+            if let theResponse = resp {
+                reponse.wrappedValue = theResponse
+            }
+        }
+    }
+    
+    /// update the specific Agro polygon name on the server
+    ///
+    /// - Parameter id: the id of the polygon to change
+    /// - Parameter name: the new name of the polygon
+    /// - closure completion: AgroPolyResponse
+    open func updatePoly(id: String, name: String, completion: @escaping (AgroPolyResponse?) -> Void) {
+        cancellable = updateThis(id: id, name: name)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { resp in
+                return completion(resp)
+            })
+    }
     
     private func fetchThis(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
         return client.fetchThis(options: options)

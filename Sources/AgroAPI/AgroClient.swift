@@ -78,13 +78,32 @@ public class AgroClient {
     private func urlSatBuilder(options: AgroOptions) -> URL? {
         return URL(string: "\(agroSatURL)/search?\(options.toParamString())&\(apiKey)")
     }
+    
+    /// change data on the server. A PUT request with the given body data is sent to the server.
+    /// The server response is parsed then converted to an object, typically AgroPolyResponse.
+    ///
+    /// - Parameter bodyData: the body request as data
+    /// - Parameter param: the id of the polygon to change
+    /// - Returns: return a AnyPublisher<T?, AgroAPIError>
+    public func putThis<T: Decodable>(bodyData: Data, param: String) -> AnyPublisher<T?, AgroAPIError> {
+        guard let url = urlPolyBuilder(.put, param: param) else {
+            return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue(mediaType, forHTTPHeaderField: "Accept")
+        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
+        request.httpBody = bodyData
+        
+        return self.doDataTaskPublish(request: request)
+    }
 
     /// post data to the server. A POST request with the given body data is sent to the server.
     /// The server response is parsed then converted to an object, typically AgroPolyResponse.
     ///
-    /// - Parameter jsonData: the body request as data
+    /// - Parameter bodyData: the body request as data
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>
-    public func postThis<T: Decodable>(jsonData: Data) -> AnyPublisher<T?, AgroAPIError> {
+    public func postThis<T: Decodable>(bodyData: Data) -> AnyPublisher<T?, AgroAPIError> {
         guard let url = urlPolyBuilder(.post, param: "") else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
@@ -92,7 +111,7 @@ public class AgroClient {
         request.httpMethod = "POST"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
         request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonData
+        request.httpBody = bodyData
         
         return self.doDataTaskPublish(request: request)
     }
@@ -200,9 +219,7 @@ public class AgroClient {
                 if (500..<600 ~= httpResponse.statusCode) {
                     throw AgroAPIError.apiError(reason: "server error")
                 }
-                
-   //             self.showPretty(data)
-                
+
                 return try? JSONDecoder().decode(T.self, from: data)
             }
             .mapError { error in
@@ -260,18 +277,5 @@ public class AgroClient {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
-    // for testing
-    private func showPretty(_ data: Data) {
-        
-        let testDecode = try? JSONDecoder().decode([AgroPolyResponse].self, from: data)
-        print("\n----> response object: \(testDecode as Optional)")
-        
-        if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
-            print("\n----> response json: " + String(decoding: jsonData, as: UTF8.self))
-        } else {
-            print("=========> json data malformed")
-        }
-    }
-    
+     
 }
