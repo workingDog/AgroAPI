@@ -65,11 +65,15 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 
 **AgroProvider** has the following asynchronous functions, together with their equivalent callback methods:
 
+**Polygons**
+
 - createPoly(poly: AgroPolygon, reponse: Binding\<AgroPolyResponse>)
 - getPoly(id: String, reponse: Binding\<AgroPolyResponse>) 
 - getPolyList(reponse: Binding\<[AgroPolyResponse]>) 
 - deletePoly(id: String, reponse: Binding\<AgroPolyResponse>)
 - updatePoly(id: String, name: String, reponse: Binding\<AgroPolyResponse>)
+
+**Satellite**
 
 - getImagery(options: AgroOptions, reponse: Binding\<[AgroImagery]>) 
 - getStatsInfo(urlString: String, reponse: Binding\<AgroStatsInfo>)
@@ -78,7 +82,11 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 - getPngUIImage(urlString: String, paletteid: Int, reponse: Binding\<UIImage>) 
 - getGeoTiffData(urlString: String, paletteid: Int, reponse: Binding\<Data>)
 - getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding\<UIImage>)
-    
+  
+  **Weather**
+
+- getCurrentWeather(id: String, reponse: Binding\<Current>)
+- getForecastWeather(id: String, reponse: Binding\<[Current]>)
 
 ### Installation
 
