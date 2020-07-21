@@ -43,9 +43,10 @@ public class AgroClient {
     public let sessionManager: URLSession
     
     public let mediaType = "application/json; charset=utf-8"
-    public let agroPolyURL = "https://api.agromonitoring.com/agro/1.0/polygons"
-    public let agroSatURL  = "https://api.agromonitoring.com/agro/1.0/image"
-    
+    public let agroPolyURL    = "https://api.agromonitoring.com/agro/1.0/polygons"
+    public let agroSatURL     = "https://api.agromonitoring.com/agro/1.0/image"
+    public let agroWeatherURL = "https://api.agromonitoring.com/agro/1.0/weather"
+ 
     public init(apiKey: String) {
         self.apiKey = "appid=" + apiKey
         self.sessionManager = {
@@ -79,6 +80,14 @@ public class AgroClient {
         return URL(string: "\(agroSatURL)/search?\(options.toParamString())&\(apiKey)")
     }
     
+    private func urlWeatherBuilder(param: String, isForecast: Bool) -> URL? {
+        if isForecast {
+            return URL(string: "\(agroWeatherURL)/forecast?polyid=\(param)&\(apiKey)")
+        } else {
+            return URL(string: "\(agroWeatherURL)?polyid=\(param)&\(apiKey)")
+        }
+    }
+ 
     /// change data on the server. A PUT request with the given body data is sent to the server.
     /// The server response is parsed then converted to an object, typically AgroPolyResponse.
     ///
@@ -126,6 +135,25 @@ public class AgroClient {
         }
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
+        request.addValue(mediaType, forHTTPHeaderField: "Accept")
+        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
+        
+        return self.doDataTaskPublish(request: request)
+    }
+     
+    /// fetch the current or forecast weather from the server.
+    /// The server response is parsed then converted to an object, typically Current or [Current].
+    ///
+    /// - Parameter param: the id of the polygon to fetch, if empty retreive the list of all polygons
+    /// - Parameter isForecast: is this for the current or forecast weather
+    /// - Returns: return a AnyPublisher<T?, AgroAPIError>
+    public func fetchThisWeather<T: Decodable>(param: String, isForecast: Bool) -> AnyPublisher<T?, AgroAPIError> {
+        guard let url = urlWeatherBuilder(param: param, isForecast: isForecast) else {
+            return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
+        }
+        print("----> url: \(url)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
         request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
         
@@ -220,6 +248,8 @@ public class AgroClient {
                     throw AgroAPIError.apiError(reason: "server error")
                 }
 
+     //           self.showPretty(data)
+                
                 return try? JSONDecoder().decode(T.self, from: data)
             }
             .mapError { error in
@@ -277,5 +307,19 @@ public class AgroClient {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+     
+    
+     // for testing
+     private func showPretty(_ data: Data) {
+         
+         let testDecode = try? JSONDecoder().decode([AgroPolyResponse].self, from: data)
+         print("\n----> testDecode: \(testDecode as Optional)")
+         
+         if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers), let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
+             print("\n--->response json: " + String(decoding: jsonData, as: UTF8.self))
+         } else {
+             print("=========> json data malformed")
+         }
+     }
      
 }

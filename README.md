@@ -5,11 +5,11 @@
 
 **AgroApi** is a small Swift library to connect to the [**OpenWeather Agro API**](https://agromonitoring.com/api) and retrieve the chosen data. Made easy to use with SwiftUI.
 
-Includes, the Polygons and Satellite Imagery APIs.
+Includes, the Polygons, Weather and Satellite Imagery APIs.
 
 #### Polygons API
 
-Polygons API provides for polygon creation, adding data, removing a polygon and listing information about one or more polygons. 
+The Agro Polygons API provides for polygon creation, adding data, removing a polygon and listing information about one or more polygons. 
 You can also retrieve the list of polygons from your account page.
 
 Reference: [Polygons](https://agromonitoring.com/api/polygons)
@@ -21,6 +21,13 @@ images in True Color, False Color, NDVI, and EVI in png, and get the meta data f
 
 Reference: [Satellite Imagery](https://agromonitoring.com/api/images)
 
+#### Agro weather API
+
+The Agro weather API provides information on the current, forecast and historical weather for your polygons.
+
+Reference: [Current weather](https://agromonitoring.com/api/current-weather)
+Reference: [Forecast weather](https://agromonitoring.com/api/forecast-weather)
+Reference: [Historical weather](https://agromonitoring.com/api/history-weather)
 
 ### Usage
 

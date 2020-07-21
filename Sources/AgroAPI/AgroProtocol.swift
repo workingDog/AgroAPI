@@ -49,8 +49,8 @@ public struct AgroPolygon: Codable {
         let geom = Geometry(type: "Polygon", coordinates: coords)
         self.geo_json = Feature(type: "Feature", properties: prop, geometry: geom)
     }
-    
-    /// check they are polygons and that the first and last positions of all polygons contain the same value.
+
+    /// check that the coords are polygons, and that the first and last positions of all polygons contain the same value.
     func isValidPoly() -> Bool {
         for coords in geo_json.geometry.coordinates {
             if coords.count < 3 { return false }
@@ -58,6 +58,7 @@ public struct AgroPolygon: Codable {
         }
         return true
     }
+    
 }
 
 /// a server response to a Agro satellite request for imagery

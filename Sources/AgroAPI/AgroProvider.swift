@@ -204,7 +204,7 @@ open class AgroProvider {
                 return completion(resp)
             })
     }
-    
+ 
     private func fetchThis(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
         return client.fetchThis(options: options)
     }
@@ -409,4 +409,68 @@ open class AgroProvider {
         }
     }
 
+    private func getWeather(param: String) -> AnyPublisher<Current?, AgroAPIError> {
+        return client.fetchThisWeather(param: param, isForecast: false)
+    }
+    
+    /// get the current weather for the polygon
+    ///
+    /// - Parameter param: the polygon id
+    /// - - closure completion: Current weather
+    open func getCurrentWeather(id: String, completion: @escaping (Current?) -> Void) {
+        cancellable = getWeather(param: id)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { resp in
+                return completion(resp)
+            })
+    }
+    
+    /// get the current weather for the polygon
+    ///
+    /// - Parameter param: the polygon id
+    /// - Binding reponse: UIImage
+    open func getCurrentWeather(id: String, reponse: Binding<Current>) {
+        getCurrentWeather(id: id) { weather in
+            if let theWeather = weather {
+                reponse.wrappedValue = theWeather
+            }
+        }
+    }
+    
+    private func getForecast(param: String) -> AnyPublisher<[Current]?, AgroAPIError> {
+        return client.fetchThisWeather(param: param, isForecast: true)
+    }
+    
+    /// get the forecast weather for the polygon
+    ///
+    /// - Parameter param: the polygon id
+    /// - - closure completion: Current weather
+    open func getForecastWeather(id: String, completion: @escaping ([Current]?) -> Void) {
+        cancellable = getForecast(param: id)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { resp in
+                return completion(resp)
+            })
+    }
+    
+    open func getForecastWeather(id: String, reponse: Binding<[Current]>) {
+        getForecastWeather(id: id) { forecast in
+            if let theForecast = forecast {
+                reponse.wrappedValue = theForecast
+            }
+        }
+    }
+    
 }

@@ -24,4 +24,38 @@ public extension Date {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds))
     }
     
+    func dayName(lang: String = "en") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.locale = Locale(identifier: lang)
+        return dateFormatter.string(from: self)
+    }
+    
+    func dayMonthNumber(lang: String = "en") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: lang)
+        dateFormatter.dateFormat = "dd"
+        return dateFormatter.string(from: self)
+    }
+    
+    func monthDay(lang: String = "en") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: lang)
+        dateFormatter.dateFormat = "LLLL"
+        let month = dateFormatter.string(from: self)
+        return dayName(lang: lang) + ", " + month + " " + dayMonthNumber(lang: lang)
+    }
+    
+    func hour() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH"
+        return dateFormatter.string(from: self)
+    }
+    
+    func hourMinute() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH.mm"
+        return dateFormatter.string(from: self)
+    }
+ 
 }
