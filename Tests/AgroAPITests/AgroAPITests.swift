@@ -6,7 +6,7 @@ final class AgroAPITests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(AgroAPI().text, "Hello, World!")
+        //XCTAssertEqual(AgroAPI().text, "Hello, World!")
     }
 
     static var allTests = [
