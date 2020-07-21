@@ -79,7 +79,7 @@ public class AgroClient {
         return URL(string: "\(agroSatURL)/search?\(options.toParamString())&\(apiKey)")
     }
 
-    /// post data to the server. A POST request with the given body dat is sent to the server.
+    /// post data to the server. A POST request with the given body data is sent to the server.
     /// The server response is parsed then converted to an object, typically AgroPolyResponse.
     ///
     /// - Parameter jsonData: the body request as data
@@ -116,7 +116,7 @@ public class AgroClient {
     /// fetch data from the server. A GET request with the chosen parameter is sent to the server.
     /// The server response is parsed then converted to an object, typically AgroPolyResponse or [AgroPolyResponse].
     ///
-    /// - Parameter param: the id of the polygon to fetch
+    /// - Parameter param: the id of the polygon to fetch, if empty retreive the list of all polygons
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>
     public func fetchThis<T: Decodable>(param: String) -> AnyPublisher<T?, AgroAPIError> {
         guard let url = urlPolyBuilder(.get, param: param) else {
@@ -131,7 +131,7 @@ public class AgroClient {
     }
     
     /// fetch data from the server. A GET request with the chosen options is sent to the server.
-    /// The server response is parsed then converted to an object, typically AgroSatResponse or [AgroSatResponse].
+    /// The server response is parsed then converted to an object, typically [AgroImagery].
     ///
     /// - Parameter options: the request options parameters
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>
@@ -139,7 +139,6 @@ public class AgroClient {
         guard let url = urlSatBuilder(options: options) else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
-        print("\n---> AgroClient fetchThis url: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
@@ -149,7 +148,7 @@ public class AgroClient {
     }
     
     /// fetch data from the server. A GET request with the chosen url is sent to the server.
-    /// The server response is parsed then converted to an object
+    /// The server response is parsed then converted to an object.
     ///
     /// - Parameter urlString: the url to fetch
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>
@@ -157,7 +156,6 @@ public class AgroClient {
         guard let url = URL(string: urlString) else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
-        print("\n---> AgroClient fetchThisUrl url: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
@@ -167,6 +165,7 @@ public class AgroClient {
     }
     
     /// fetch data from the server. A GET request with the chosen url is sent to the server.
+    /// The server response is not parsed.
     ///
     /// - Parameter urlString: the url to fetch
     /// - Returns: return a AnyPublisher<Data?, AgroAPIError>
@@ -174,7 +173,6 @@ public class AgroClient {
         guard let url = URL(string: urlString) else {
             return Just<Data?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
-        print("\n---> AgroClient fetchThisData url: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -222,8 +220,7 @@ public class AgroClient {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
-    
-    
+
     private func doRawDataTaskPublish(request: URLRequest) -> AnyPublisher<Data?, AgroAPIError> {
         return self.sessionManager.dataTaskPublisher(for: request)
             .tryMap { data, response in

@@ -38,7 +38,7 @@ public struct AgroPolyResponse: Codable {
 }
 
 /// Agro Polygon
-/// When creating a polygon, the first and last positions are equivalent, and they MUST contain identical values.
+/// When creating a polygon, the first and last positions are equivalent, and MUST contain identical values.
 public struct AgroPolygon: Codable {
     public let name: String
     public let geo_json: Feature
@@ -57,7 +57,7 @@ public struct AgroPolygon: Codable {
     
 }
 
-/// a server response to a Agro satellite request
+/// a server response to a Agro satellite request for imagery
 public struct AgroImagery: Codable {
     public let dt: Int?
     public let type: String?
@@ -106,7 +106,7 @@ public struct AgroStatsInfo: Codable {
     public let mean: Double?  
 }
 
-/// Options to use for searching satellite images of a polygon
+/// Options to use for searching for satellite images of a polygon
 public class AgroOptions {
     
     public var polygon_id: String

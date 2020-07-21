@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 
-/// provides access to the Agro API
+/// provides access to the Agro API, for both Polygons and Satellite imagery API
 ///
 /// info at: https://agromonitoring.com/api/polygons
 /// and  at: https://agromonitoring.com/api/images
@@ -24,7 +24,7 @@ open class AgroProvider {
         self.client = AgroClient(apiKey: apiKey)
     }
     
-    open func postThis(data: Data) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
+    private func postThis(data: Data) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
         return client.postThis(jsonData: data)
     }
 
@@ -59,14 +59,14 @@ open class AgroProvider {
             })
     }
     
-    open func fetchThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
+    private func fetchThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
         return client.fetchThis(param: param)
     }
     
     /// get the specific Agro polygon info from the server
     ///
     /// - Parameter id: the id of the polygon to get
-    /// - Binding reponse AgroPolyResponse
+    /// - Binding reponse: AgroPolyResponse
     open func getPoly(id: String, reponse: Binding<AgroPolyResponse>) {
         getPoly(id: id) { resp in
             if let theResponse = resp {
@@ -93,13 +93,13 @@ open class AgroProvider {
             })
     }
     
-    open func fetchThisList(param: String) -> AnyPublisher<[AgroPolyResponse]?, AgroAPIError> {
+    private func fetchThisList(param: String) -> AnyPublisher<[AgroPolyResponse]?, AgroAPIError> {
         return client.fetchThis(param: param)
     }
     
     /// get the Agro polygon list from the server
     ///
-    /// - Binding reponse AgroPolyResponse
+    /// - Binding reponse: AgroPolyResponse
     open func getPolyList(reponse: Binding<[AgroPolyResponse]>) {
         getPolyList() { resp in
             if let theResponse = resp {
@@ -125,14 +125,14 @@ open class AgroProvider {
             })
     }
     
-    open func deleteThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
+    private func deleteThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
         return client.deleteThis(param: param)
     }
     
     /// delete the specific Agro polygon from the server
     ///
     /// - Parameter id: the id of the polygon to delete
-    /// - Binding reponse AgroPolyResponse
+    /// - Binding reponse: AgroPolyResponse
     open func deletePoly(id: String, reponse: Binding<AgroPolyResponse>) {
         deletePoly(id: id) { resp in
             if let theResponse = resp {
@@ -182,14 +182,14 @@ open class AgroProvider {
     //    }
     
     
-    open func fetchThis(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
+    private func fetchThis(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
         return client.fetchThis(options: options)
     }
     
     /// get all available satellite imageries for the polygon and return the info
     ///
     /// - Parameter options: the options
-    /// - Binding reponse [AgroSatResponse]
+    /// - Binding reponse: [AgroImagery]
     open func getImagery(options: AgroOptions, reponse: Binding<[AgroImagery]>) {
         getImagery(options: options) { resp in
             if let theResponse = resp {
@@ -201,7 +201,7 @@ open class AgroProvider {
     /// get all available satellite imageries for the polygon and return the info
     ///
     /// - Parameter options: the options
-    /// - closure completion: [AgroSatResponse]
+    /// - closure completion: [AgroImagery]
     open func getImagery(options: AgroOptions, completion: @escaping ([AgroImagery]?) -> Void) {
         cancellable = fetchThis(options: options)
             .sink(receiveCompletion: { completion in
@@ -216,7 +216,7 @@ open class AgroProvider {
             })
     }
 
-    open func fetchStatsInfo(urlString: String) -> AnyPublisher<AgroStatsInfo?, AgroAPIError> {
+    private func fetchStatsInfo(urlString: String) -> AnyPublisher<AgroStatsInfo?, AgroAPIError> {
         return client.fetchThisUrl(urlString: urlString)
     }
     
@@ -250,7 +250,7 @@ open class AgroProvider {
             })
     }
     
-    open func fetchThisData(urlString: String) -> AnyPublisher<Data?, AgroAPIError> {
+    private func fetchThisData(urlString: String) -> AnyPublisher<Data?, AgroAPIError> {
         return client.fetchThisData(urlString: urlString)
     }
     
@@ -365,7 +365,7 @@ open class AgroProvider {
     /// get the satellite imageries of a GeoTiff image as UIImage for the polygon
     ///
     /// - Parameter urlString: the url to fetch
-    /// - closure completion: Data
+    /// - closure completion: UIImage
     open func getGeoTiffUIImage(urlString: String, paletteid: Int, completion: @escaping (UIImage?) -> Void) {
         getGeoTiffData(urlString: urlString, paletteid: paletteid) { data in
             if let imgData = data, let uimg = UIImage(data: imgData) {
@@ -378,7 +378,7 @@ open class AgroProvider {
     /// get the satellite imageries of a GeoTiff image as UIImage for the polygon
     ///
     /// - Parameter urlString: the url to fetch
-    /// - Binding reponse: data
+    /// - Binding reponse: UIImage
     open func getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>) {
         getGeoTiffUIImage(urlString: urlString, paletteid: paletteid) { img in
             if let theImg = img {
