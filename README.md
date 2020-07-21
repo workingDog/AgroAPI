@@ -52,9 +52,24 @@ using a set of simple asynchronous functions, for example:
        }
     }
    
-
 See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an example use.
 
+**AgroProvider** has the following asynchronous functions, together with their callback equivalent:
+
+- open func createPoly(poly: AgroPolygon, reponse: Binding<AgroPolyResponse>)
+- open func getPoly(id: String, reponse: Binding<AgroPolyResponse>) 
+- open func getPolyList(reponse: Binding<[AgroPolyResponse]>) 
+- open func deletePoly(id: String, reponse: Binding<AgroPolyResponse>)
+- open func updatePoly(id: String, name: String, reponse: Binding<AgroPolyResponse>)
+
+- open func getImagery(options: AgroOptions, reponse: Binding<[AgroImagery]>) 
+- open func getStatsInfo(urlString: String, reponse: Binding<AgroStatsInfo>)
+- open func getTile(urlString: String, reponse: Binding<Data>) 
+- open func getPngImageData(urlString: String, paletteid: Int, reponse: Binding<Data>) 
+- open func getPngUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>) 
+- open func getGeoTiffData(urlString: String, paletteid: Int, reponse: Binding<Data>)
+- open func getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>)
+    
 
 ### Installation
 
