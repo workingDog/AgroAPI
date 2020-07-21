@@ -26,7 +26,9 @@ Reference: [Satellite Imagery](https://agromonitoring.com/api/images)
 The Agro weather API provides information on the current, forecast and historical weather for your polygons.
 
 Reference: [Current weather](https://agromonitoring.com/api/current-weather)
+
 Reference: [Forecast weather](https://agromonitoring.com/api/forecast-weather)
+
 Reference: [Historical weather](https://agromonitoring.com/api/history-weather)
 
 ### Usage
