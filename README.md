@@ -10,13 +10,13 @@ Includes, the Polygons and Satellite Imagery APIs.
 #### Polygons API
 
 Polygons API provides for polygon creation, adding data, removing a polygon and listing information about one or more polygons. 
-You can also retreive the list of your polygons from your account page.
+You can also retrieve the list of polygons from your account page.
 
 Reference: [Polygons](https://agromonitoring.com/api/polygons)
 
 #### Satellite Imagery API
 
-After the creation of polygons, the satellite imagery can be used for retreiving images for those polygons, such as; 
+After the creation of polygons, the satellite imagery can be used for retrieving images for those polygons, such as; 
 images in True Color, False Color, NDVI, and EVI in png, and get the meta data for your polygon or image in tiff.
 
 Reference: [Satellite Imagery](https://agromonitoring.com/api/images)
