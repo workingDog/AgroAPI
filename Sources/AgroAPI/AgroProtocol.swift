@@ -52,11 +52,11 @@ public struct AgroPolygon: Codable {
     
     /// check that the first and last positions of all polygons contain the same value.
     func isValidPoly() -> Bool {
-        var valid: [Bool] = []
         for coords in geo_json.geometry.coordinates {
-            valid.append(coords.first == coords.last)
+            if coords.count < 3 { return false }
+            if coords.first != coords.last { return false }
         }
-        return valid.allSatisfy{$0 == true}
+        return true
     }
 }
 
