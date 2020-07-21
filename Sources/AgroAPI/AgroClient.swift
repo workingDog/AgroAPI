@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-
 /// http method types
 public enum HttpMethod: String {
     case get = "GET"
