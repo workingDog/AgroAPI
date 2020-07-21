@@ -50,11 +50,14 @@ public struct AgroPolygon: Codable {
         self.geo_json = Feature(type: "Feature", properties: prop, geometry: geom)
     }
     
-    // todo
-//    func validatePoly() -> Bool {
-//        return true
-//    }
-    
+    /// check that the first and last positions of all polygons contain the same value.
+    func isValidPoly() -> Bool {
+        var valid: [Bool] = []
+        for coords in geo_json.geometry.coordinates {
+            valid.append(coords.first == coords.last)
+        }
+        return valid.allSatisfy{$0 == true}
+    }
 }
 
 /// a server response to a Agro satellite request for imagery
