@@ -27,7 +27,7 @@ Reference: [Satellite Imagery](https://agromonitoring.com/api/images)
 All interactions with the Agro API server is done through the use of a single **AgroProvider**.
 
 Data, such as satellite imagery from  [**Agro API**](https://agromonitoring.com/api) is accessed through the **AgroProvider** 
-using a set of simple functions, for example:
+using a set of simple asynchronous functions, for example:
 
     import AgroApi
     
@@ -88,6 +88,8 @@ Then in your code:
 Requires a valid OpenWeather key, see:
 
 -    [OpenWeather how to start](https://openweathermap.org/appid)
+
+-    [Agro API](https://agromonitoring.com/api/get)
 
 ### License
 
