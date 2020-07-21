@@ -60,7 +60,7 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 - getPoly(id: String, reponse: Binding<AgroPolyResponse>) 
 - getPolyList(reponse: Binding<[AgroPolyResponse]>) 
 - deletePoly(id: String, reponse: Binding<AgroPolyResponse>)
-- "updatePoly(id: String, name: String, reponse: Binding<AgroPolyResponse>)"
+- updatePoly(id: String, name: String, reponse: Binding/<AgroPolyResponse/>)
 
 - getImagery(options: AgroOptions, reponse: Binding<[AgroImagery]>) 
 - getStatsInfo(urlString: String, reponse: Binding<AgroStatsInfo>)
