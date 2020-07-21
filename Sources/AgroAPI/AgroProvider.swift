@@ -258,8 +258,8 @@ open class AgroProvider {
     ///
     /// - Parameter urlString: the url to fetch
     /// - Binding reponse: Data
-    open func getTile(urlString: String, z: Int, x: Int, y: Int, reponse: Binding<Data>) {
-        getTile(urlString: urlString, z: z, x: x, y: y) { resp in
+    open func getTile(urlString: String, reponse: Binding<Data>) {
+        getTile(urlString: urlString) { resp in
             if let theResponse = resp {
                 reponse.wrappedValue = theResponse
             }
@@ -270,9 +270,8 @@ open class AgroProvider {
     ///
     /// - Parameter urlString: the url to fetch
     /// - closure completion: Data
-    open func getTile(urlString: String, z: Int, x: Int, y: Int, completion: @escaping (Data?) -> Void) {
-        let theUrl = urlString.replacingOccurrences(of: "{z}/{x}/{y}", with: "\(z)/\(x)/\(y)")
-        cancellable = fetchThisData(urlString: theUrl)
+    open func getTile(urlString: String, completion: @escaping (Data?) -> Void) {
+        cancellable = fetchThisData(urlString: urlString)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:

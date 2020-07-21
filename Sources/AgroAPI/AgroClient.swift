@@ -178,7 +178,7 @@ public class AgroClient {
         
         return self.doRawDataTaskPublish(request: request)
     }
-
+    
     private func doDataTaskPublish<T: Decodable>(request: URLRequest) -> AnyPublisher<T?, AgroAPIError> {
         return self.sessionManager.dataTaskPublisher(for: request)
             .tryMap { data, response in
