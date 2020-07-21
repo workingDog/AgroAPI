@@ -177,4 +177,25 @@ public class AgroOptions {
     }
 }
 
+/// Options to use for historical weather of a polygon
+public class AgroWeatherOptions {
+    
+    public var polygon_id: String
+    public var start: Int
+    public var end: Int
+
+    public init(polygon_id: String, start: Int, end: Int) {
+        self.polygon_id = polygon_id
+        self.start = start
+        self.end = end
+    }
+    
+    public func toParamString() -> String {
+        var stringer = ""
+        stringer += "polygon_id=" + polygon_id
+        stringer += "&start=" + String(start)
+        stringer += "&end=" + String(end)
+        return stringer
+    }
+}
 

@@ -83,10 +83,11 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 - getGeoTiffData(urlString: String, paletteid: Int, reponse: Binding\<Data>)
 - getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding\<UIImage>)
   
-  **Weather**
+**Weather**
 
 - getCurrentWeather(id: String, reponse: Binding\<Current>)
 - getForecastWeather(id: String, reponse: Binding\<[Current]>)
+- getHistoricalWeather(id: String, options: AgroWeatherOptions, reponse: Binding\<[Current]>)
 
 ### Installation
 

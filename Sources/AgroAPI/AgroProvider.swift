@@ -59,7 +59,7 @@ open class AgroProvider {
             })
     }
     
-    private func fetchThis(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
+    private func fetchPoly(param: String) -> AnyPublisher<AgroPolyResponse?, AgroAPIError> {
         return client.fetchThis(param: param)
     }
     
@@ -80,7 +80,7 @@ open class AgroProvider {
     /// - Parameter id: the id of the polygon to get
     /// - closure completion: AgroPolyResponse
     open func getPoly(id: String, completion: @escaping (AgroPolyResponse?) -> Void) {
-        cancellable = fetchThis(param: id)
+        cancellable = fetchPoly(param: id)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -93,7 +93,7 @@ open class AgroProvider {
             })
     }
     
-    private func fetchThisList(param: String) -> AnyPublisher<[AgroPolyResponse]?, AgroAPIError> {
+    private func fetchPolyList(param: String) -> AnyPublisher<[AgroPolyResponse]?, AgroAPIError> {
         return client.fetchThis(param: param)
     }
     
@@ -112,7 +112,7 @@ open class AgroProvider {
     ///
     /// - closure completion: [AgroPolyResponse]
     open func getPolyList(completion: @escaping ([AgroPolyResponse]?) -> Void) {
-        cancellable = fetchThisList(param: "")
+        cancellable = fetchPolyList(param: "")
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -205,7 +205,7 @@ open class AgroProvider {
             })
     }
  
-    private func fetchThis(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
+    private func fetchImagery(options: AgroOptions) -> AnyPublisher<[AgroImagery]?, AgroAPIError> {
         return client.fetchThis(options: options)
     }
     
@@ -226,7 +226,7 @@ open class AgroProvider {
     /// - Parameter options: the options
     /// - closure completion: [AgroImagery]
     open func getImagery(options: AgroOptions, completion: @escaping ([AgroImagery]?) -> Void) {
-        cancellable = fetchThis(options: options)
+        cancellable = fetchImagery(options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -409,7 +409,7 @@ open class AgroProvider {
         }
     }
 
-    private func getWeather(param: String) -> AnyPublisher<Current?, AgroAPIError> {
+    private func fetchCurrentWeather(param: String) -> AnyPublisher<Current?, AgroAPIError> {
         return client.fetchThisWeather(param: param, isForecast: false)
     }
     
@@ -418,7 +418,7 @@ open class AgroProvider {
     /// - Parameter param: the polygon id
     /// - - closure completion: Current weather
     open func getCurrentWeather(id: String, completion: @escaping (Current?) -> Void) {
-        cancellable = getWeather(param: id)
+        cancellable = fetchCurrentWeather(param: id)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -443,8 +443,8 @@ open class AgroProvider {
         }
     }
     
-    private func getForecast(param: String) -> AnyPublisher<[Current]?, AgroAPIError> {
-        return client.fetchThisWeather(param: param, isForecast: true)
+    private func fetchWeather(param: String, options: AgroWeatherOptions? = nil) -> AnyPublisher<[Current]?, AgroAPIError> {
+        return client.fetchThisWeather(param: param, isForecast: true, options: options)
     }
     
     /// get the forecast weather for the polygon
@@ -452,7 +452,7 @@ open class AgroProvider {
     /// - Parameter param: the polygon id
     /// - - closure completion: Current weather
     open func getForecastWeather(id: String, completion: @escaping ([Current]?) -> Void) {
-        cancellable = getForecast(param: id)
+        cancellable = fetchWeather(param: id)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -467,6 +467,32 @@ open class AgroProvider {
     
     open func getForecastWeather(id: String, reponse: Binding<[Current]>) {
         getForecastWeather(id: id) { forecast in
+            if let theForecast = forecast {
+                reponse.wrappedValue = theForecast
+            }
+        }
+    }
+    
+    /// get the historical weather for the polygon
+    ///
+    /// - Parameter param: the polygon id
+    /// - - closure completion: Current weather
+    open func getHistoricalWeather(id: String, options: AgroWeatherOptions, completion: @escaping ([Current]?) -> Void) {
+        cancellable = fetchWeather(param: id, options: options)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { resp in
+                return completion(resp)
+            })
+    }
+    
+    open func getHistoricalWeather(id: String, options: AgroWeatherOptions, reponse: Binding<[Current]>) {
+        getHistoricalWeather(id: id, options: options) { forecast in
             if let theForecast = forecast {
                 reponse.wrappedValue = theForecast
             }
