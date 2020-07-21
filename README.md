@@ -56,19 +56,19 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 
 **AgroProvider** has the following asynchronous functions, together with their callback equivalent:
 
-- createPoly(poly: AgroPolygon, reponse: Binding<AgroPolyResponse>)
-- getPoly(id: String, reponse: Binding<AgroPolyResponse>) 
-- getPolyList(reponse: Binding<[AgroPolyResponse]>) 
-- deletePoly(id: String, reponse: Binding<AgroPolyResponse>)
+- createPoly(poly: AgroPolygon, reponse: Binding\<AgroPolyResponse>)
+- getPoly(id: String, reponse: Binding\<AgroPolyResponse>) 
+- getPolyList(reponse: Binding\<[AgroPolyResponse]>) 
+- deletePoly(id: String, reponse: Binding\<AgroPolyResponse>)
 - updatePoly(id: String, name: String, reponse: Binding\<AgroPolyResponse>)
 
-- getImagery(options: AgroOptions, reponse: Binding<[AgroImagery]>) 
-- getStatsInfo(urlString: String, reponse: Binding<AgroStatsInfo>)
-- getTile(urlString: String, reponse: Binding<Data>) 
-- getPngImageData(urlString: String, paletteid: Int, reponse: Binding<Data>) 
-- getPngUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>) 
-- getGeoTiffData(urlString: String, paletteid: Int, reponse: Binding<Data>)
-- getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>)
+- getImagery(options: AgroOptions, reponse: Binding\<[AgroImagery]>) 
+- getStatsInfo(urlString: String, reponse: Binding\<AgroStatsInfo>)
+- getTile(urlString: String, reponse: Binding\<Data>) 
+- getPngImageData(urlString: String, paletteid: Int, reponse: Binding\<Data>) 
+- getPngUIImage(urlString: String, paletteid: Int, reponse: Binding\<UIImage>) 
+- getGeoTiffData(urlString: String, paletteid: Int, reponse: Binding\<Data>)
+- getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding\<UIImage>)
     
 
 ### Installation
