@@ -54,7 +54,7 @@ using a set of simple asynchronous functions, for example:
    
 See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an example use.
 
-**AgroProvider** has the following asynchronous functions, together with their callback equivalent:
+**AgroProvider** has the following asynchronous functions, together with their equivalent callback methods:
 
 - createPoly(poly: AgroPolygon, reponse: Binding\<AgroPolyResponse>)
 - getPoly(id: String, reponse: Binding\<AgroPolyResponse>) 
