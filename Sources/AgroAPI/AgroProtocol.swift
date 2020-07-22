@@ -43,7 +43,7 @@ public struct AgroPolygon: Codable {
     public let name: String
     public let geo_json: Feature
     
-    init(name: String, coords: [[[Double]]]) {
+    public init(name: String, coords: [[[Double]]]) {
         self.name = name
         let prop = Properties(name: nil)
         let geom = Geometry(type: "Polygon", coordinates: coords)
@@ -51,7 +51,7 @@ public struct AgroPolygon: Codable {
     }
 
     /// check that the coords are polygons, and that the first and last positions of all polygons contain the same value.
-    func isValidPoly() -> Bool {
+    public func isValidPoly() -> Bool {
         for coords in geo_json.geometry.coordinates {
             if coords.count < 3 { return false }
             if coords.first != coords.last { return false }
