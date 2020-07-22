@@ -30,7 +30,6 @@ public struct MainData: Codable {
     public let temp_kf: Double?
 }
 
-// MARK: - Current
 public struct Current: Codable {
     public let dt: Int
     public let main: MainData?
@@ -55,7 +54,6 @@ public struct Current: Codable {
     }
 }
 
-// MARK: - Rain
 public struct Rain: Codable {
     public let the1H: Double?
     public let the3H: Double?
@@ -82,7 +80,6 @@ public struct Rain: Codable {
     
 }
 
-// MARK: - Snow
 public struct Snow: Codable {
     public let the1H: Double?
     public let the3H: Double?
@@ -108,7 +105,6 @@ public struct Snow: Codable {
     }
 }
 
-// MARK: - Weather
 public struct Weather: Codable {
     public let id: Int
     public let main, weatherDescription, icon: String

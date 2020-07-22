@@ -43,6 +43,7 @@ public class AgroClient {
     public let sessionManager: URLSession
     
     public let mediaType = "application/json; charset=utf-8"
+    
     public let agroPolyURL    = "https://api.agromonitoring.com/agro/1.0/polygons"
     public let agroSatURL     = "https://api.agromonitoring.com/agro/1.0/image"
     public let agroWeatherURL = "https://api.agromonitoring.com/agro/1.0/weather"
@@ -158,7 +159,23 @@ public class AgroClient {
         guard let url = urlHistoryBuilder(options: options) else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
-        print("\n---> url: \(url)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(mediaType, forHTTPHeaderField: "Accept")
+        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
+        
+        return self.doDataTaskPublish(request: request)
+    }
+
+    /// fetch data from the server. A GET request with the chosen options is sent to the server.
+    /// The server response is parsed then converted to an object, typically [AgroImagery].
+    ///
+    /// - Parameter options: the request options parameters
+    /// - Returns: return a AnyPublisher<T?, AgroAPIError>
+    public func fetchThis<T: Decodable>(options: AgroOptions) -> AnyPublisher<T?, AgroAPIError> {
+        guard let url = urlSatBuilder(options: options) else {
+            return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
@@ -201,24 +218,7 @@ public class AgroClient {
         
         return self.doDataTaskPublish(request: request)
     }
-    
-    /// fetch data from the server. A GET request with the chosen options is sent to the server.
-    /// The server response is parsed then converted to an object, typically [AgroImagery].
-    ///
-    /// - Parameter options: the request options parameters
-    /// - Returns: return a AnyPublisher<T?, AgroAPIError>
-    public func fetchThis<T: Decodable>(options: AgroOptions) -> AnyPublisher<T?, AgroAPIError> {
-        guard let url = urlSatBuilder(options: options) else {
-            return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue(mediaType, forHTTPHeaderField: "Accept")
-        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
-        
-        return self.doDataTaskPublish(request: request)
-    }
-    
+ 
     /// fetch data from the server. A GET request with the chosen url is sent to the server.
     /// The server response is parsed then converted to an object.
     ///
