@@ -80,7 +80,7 @@ public class AgroClient {
         return URL(string: "\(agroSatURL)/search?\(options.toParamString())&\(apiKey)")
     }
     
-    private func urlWeatherBuilder(param: String, isForecast: Bool, options: AgroWeatherOptions? = nil) -> URL? {
+    private func urlWeatherBuilder(param: String, isForecast: Bool, options: WeatherOptions? = nil) -> URL? {
         if options != nil {
             return URL(string: "\(agroWeatherURL)/history?polyid=\(param)&\(apiKey)")
         }
@@ -150,7 +150,7 @@ public class AgroClient {
     /// - Parameter param: the id of the polygon to fetch, if empty retreive the list of all polygons
     /// - Parameter isForecast: is this for the current or forecast weather
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>
-    public func fetchThisWeather<T: Decodable>(param: String, isForecast: Bool, options: AgroWeatherOptions? = nil) -> AnyPublisher<T?, AgroAPIError> {
+    public func fetchThisWeather<T: Decodable>(param: String, isForecast: Bool, options: WeatherOptions? = nil) -> AnyPublisher<T?, AgroAPIError> {
         guard let url = urlWeatherBuilder(param: param, isForecast: isForecast, options: options) else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }

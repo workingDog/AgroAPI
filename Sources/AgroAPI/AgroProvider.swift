@@ -443,7 +443,7 @@ open class AgroProvider {
         }
     }
     
-    private func fetchWeather(param: String, options: AgroWeatherOptions? = nil) -> AnyPublisher<[Current]?, AgroAPIError> {
+    private func fetchWeather(param: String, options: WeatherOptions? = nil) -> AnyPublisher<[Current]?, AgroAPIError> {
         return client.fetchThisWeather(param: param, isForecast: true, options: options)
     }
     
@@ -477,7 +477,7 @@ open class AgroProvider {
     ///
     /// - Parameter param: the polygon id
     /// - - closure completion: Current weather
-    open func getHistoricalWeather(id: String, options: AgroWeatherOptions, completion: @escaping ([Current]?) -> Void) {
+    open func getHistoricalWeather(id: String, options: WeatherOptions, completion: @escaping ([Current]?) -> Void) {
         cancellable = fetchWeather(param: id, options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -491,7 +491,7 @@ open class AgroProvider {
             })
     }
     
-    open func getHistoricalWeather(id: String, options: AgroWeatherOptions, reponse: Binding<[Current]>) {
+    open func getHistoricalWeather(id: String, options: WeatherOptions, reponse: Binding<[Current]>) {
         getHistoricalWeather(id: id, options: options) { forecast in
             if let theForecast = forecast {
                 reponse.wrappedValue = theForecast
