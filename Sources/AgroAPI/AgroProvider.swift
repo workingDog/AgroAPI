@@ -499,4 +499,34 @@ open class AgroProvider {
         }
     }
     
+    private func fetchHistory(options: AgroOptions) -> AnyPublisher<[AgroHistoryNDVI]?, AgroAPIError> {
+        return client.fetchThisHistory(options: options)
+    }
+    
+    /// get the historical NDVI for the polygon
+    ///
+    /// - Parameter options: options for the request
+    /// - closure completion: historical NDVI
+    open func getHistoricalNDVI(options: AgroOptions, completion: @escaping ([AgroHistoryNDVI]?) -> Void) {
+        cancellable = fetchHistory(options: options)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }, receiveValue: { resp in
+                return completion(resp)
+            })
+    }
+    
+    open func getHistoricalNDVI(options: AgroOptions, reponse: Binding<[AgroHistoryNDVI]>) {
+        getHistoricalNDVI(options: options) { hndvi in
+            if let theHist = hndvi {
+                reponse.wrappedValue = theHist
+            }
+        }
+    }
+    
 }

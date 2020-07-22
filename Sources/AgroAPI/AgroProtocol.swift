@@ -177,3 +177,12 @@ public class AgroOptions {
     }
 }
 
+/// a server response to a Agro historycal NDVI request
+public struct AgroHistoryNDVI: Codable {
+    public let dt: Int?
+    public let source: String?
+    public let dc: Int?
+    public let cl: Double?
+    public let zoom: Int?
+    public let data: AgroStats?
+}

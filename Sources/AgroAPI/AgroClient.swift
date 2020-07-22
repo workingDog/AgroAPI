@@ -46,6 +46,7 @@ public class AgroClient {
     public let agroPolyURL    = "https://api.agromonitoring.com/agro/1.0/polygons"
     public let agroSatURL     = "https://api.agromonitoring.com/agro/1.0/image"
     public let agroWeatherURL = "https://api.agromonitoring.com/agro/1.0/weather"
+    public let agroHistoryURL = "https://api.agromonitoring.com/agro/1.0/ndvi/history"
  
     public init(apiKey: String) {
         self.apiKey = "appid=" + apiKey
@@ -78,6 +79,10 @@ public class AgroClient {
     
     private func urlSatBuilder(options: AgroOptions) -> URL? {
         return URL(string: "\(agroSatURL)/search?\(options.toParamString())&\(apiKey)")
+    }
+    
+    private func urlHistoryBuilder(options: AgroOptions) -> URL? {
+        return URL(string: "\(agroHistoryURL)/?\(options.toParamString())&\(apiKey)")
     }
     
     private func urlWeatherBuilder(param: String, isForecast: Bool, options: WeatherOptions? = nil) -> URL? {
@@ -143,7 +148,24 @@ public class AgroClient {
         
         return self.doDataTaskPublish(request: request)
     }
-     
+   
+    /// fetch the historical NDVI data from the server.
+    /// The server response is parsed then converted to an object.
+    ///
+    /// - Parameter options: the polygon id and other options specifying the request
+    /// - Returns: return a AnyPublisher<T?, AgroAPIError>
+    public func fetchThisHistory<T: Decodable>(options: AgroOptions) -> AnyPublisher<T?, AgroAPIError> {
+        guard let url = urlHistoryBuilder(options: options) else {
+            return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(mediaType, forHTTPHeaderField: "Accept")
+        request.addValue(mediaType, forHTTPHeaderField: "Content-Type")
+        
+        return self.doDataTaskPublish(request: request)
+    }
+    
     /// fetch the current or forecast weather from the server.
     /// The server response is parsed then converted to an object, typically Current or [Current].
     ///
