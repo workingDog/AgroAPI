@@ -151,7 +151,7 @@ public class AgroClient {
     }
    
     /// fetch the historical NDVI data from the server.
-    /// The server response is parsed then converted to an object.
+    /// The server response is parsed then converted to an object, typically [AgroHistoryNDVI]
     ///
     /// - Parameter options: the polygon id and other options specifying the request
     /// - Returns: return a AnyPublisher<T?, AgroAPIError>

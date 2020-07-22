@@ -10,7 +10,7 @@ Includes, the Polygons, Weather, Satellite Imagery and Historical NDVI APIs.
 #### Polygons API
 
 The Agro Polygons API provides for polygon creation, adding data, removing a polygon and listing information about one or more polygons. 
-You can also retrieve the list of polygons from your account page.
+You can also retrieve the list of all polygons from your account page.
 
 Reference: [Polygons](https://agromonitoring.com/api/polygons)
 
@@ -73,6 +73,8 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 
 **AgroProvider** has the following asynchronous functions, together with their equivalent callback methods:
 
+Note, **AgroProvider** should be strongly referenced.
+
 **Polygons**
 
 - createPoly(poly: AgroPolygon, reponse: Binding\<AgroPolyResponse>)
@@ -100,7 +102,6 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 **Historical NDVI**
 
 - getHistoricalNDVI(options: AgroOptions, reponse: Binding\<[AgroHistoryNDVI]>)
-
 
 
 ### Installation
