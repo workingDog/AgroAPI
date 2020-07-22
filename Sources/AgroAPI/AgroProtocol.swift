@@ -175,6 +175,12 @@ public class AgroOptions {
         }
         return stringer
     }
+    
+    /// to return the option suitable for historical NDVI request
+    public func toHistoryNDVIParamString() -> String {
+        var stringer = toParamString()
+        return stringer.replacingOccurrences(of: "polygon_id", with: "polyid")
+    }
 }
 
 /// a server response to a Agro historycal NDVI request
@@ -184,5 +190,5 @@ public struct AgroHistoryNDVI: Codable {
     public let dc: Int?
     public let cl: Double?
     public let zoom: Int?
-    public let data: AgroStats?
+    public let data: AgroStatsInfo?
 }

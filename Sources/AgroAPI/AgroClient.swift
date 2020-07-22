@@ -82,7 +82,7 @@ public class AgroClient {
     }
     
     private func urlHistoryBuilder(options: AgroOptions) -> URL? {
-        return URL(string: "\(agroHistoryURL)/?\(options.toParamString())&\(apiKey)")
+        return URL(string: "\(agroHistoryURL)?\(options.toHistoryNDVIParamString())&\(apiKey)")
     }
     
     private func urlWeatherBuilder(param: String, isForecast: Bool, options: WeatherOptions? = nil) -> URL? {
@@ -158,6 +158,7 @@ public class AgroClient {
         guard let url = urlHistoryBuilder(options: options) else {
             return Just<T?>(nil).setFailureType(to: AgroAPIError.self).eraseToAnyPublisher()
         }
+        print("\n---> url: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(mediaType, forHTTPHeaderField: "Accept")
@@ -272,7 +273,7 @@ public class AgroClient {
                     throw AgroAPIError.apiError(reason: "server error")
                 }
 
-     //           self.showPretty(data)
+  //              self.showPretty(data)
                 
                 return try? JSONDecoder().decode(T.self, from: data)
             }

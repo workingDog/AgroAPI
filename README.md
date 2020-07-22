@@ -95,11 +95,11 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 
 - getCurrentWeather(id: String, reponse: Binding\<Current>)
 - getForecastWeather(id: String, reponse: Binding\<[Current]>)
-- getHistoricalWeather(id: String, options: AgroWeatherOptions, reponse: Binding\<[Current]>)
+- getHistoricalWeather(options: AgroWeatherOptions, reponse: Binding\<[Current]>)
 
 **Historical NDVI**
 
-- getHistoricalNDVI(id: String, reponse: Binding\<Current>)
+- getHistoricalNDVI(options: AgroOptions, reponse: Binding\<[AgroHistoryNDVI]>)
 
 
 

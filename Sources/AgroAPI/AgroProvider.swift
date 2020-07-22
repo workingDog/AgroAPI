@@ -416,7 +416,7 @@ open class AgroProvider {
     /// get the current weather for the polygon
     ///
     /// - Parameter param: the polygon id
-    /// - - closure completion: Current weather
+    /// - closure completion: Current weather
     open func getCurrentWeather(id: String, completion: @escaping (Current?) -> Void) {
         cancellable = fetchCurrentWeather(param: id)
             .sink(receiveCompletion: { completion in
@@ -450,7 +450,7 @@ open class AgroProvider {
     /// get the forecast weather for the polygon
     ///
     /// - Parameter param: the polygon id
-    /// - - closure completion: Current weather
+    /// - closure completion: Current weather
     open func getForecastWeather(id: String, completion: @escaping ([Current]?) -> Void) {
         cancellable = fetchWeather(param: id)
             .sink(receiveCompletion: { completion in
@@ -476,9 +476,9 @@ open class AgroProvider {
     /// get the historical weather for the polygon
     ///
     /// - Parameter param: the polygon id
-    /// - - closure completion: Current weather
-    open func getHistoricalWeather(id: String, options: WeatherOptions, completion: @escaping ([Current]?) -> Void) {
-        cancellable = fetchWeather(param: id, options: options)
+    /// - closure completion: Current weather
+    open func getHistoricalWeather(options: WeatherOptions, completion: @escaping ([Current]?) -> Void) {
+        cancellable = fetchWeather(param: options.polygon_id, options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -491,8 +491,8 @@ open class AgroProvider {
             })
     }
     
-    open func getHistoricalWeather(id: String, options: WeatherOptions, reponse: Binding<[Current]>) {
-        getHistoricalWeather(id: id, options: options) { forecast in
+    open func getHistoricalWeather(options: WeatherOptions, reponse: Binding<[Current]>) {
+        getHistoricalWeather(options: options) { forecast in
             if let theForecast = forecast {
                 reponse.wrappedValue = theForecast
             }
