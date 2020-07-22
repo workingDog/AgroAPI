@@ -5,7 +5,7 @@
 
 **AgroApi** is a small Swift library to connect to the [**OpenWeather Agro API**](https://agromonitoring.com/api) and retrieve the chosen data. Made easy to use with SwiftUI.
 
-Includes, the Polygons, Weather and Satellite Imagery APIs.
+Includes, the Polygons, Weather, Satellite Imagery and Historical NDVI APIs.
 
 #### Polygons API
 
@@ -30,6 +30,14 @@ Reference: [Current weather](https://agromonitoring.com/api/current-weather)
 Reference: [Forecast weather](https://agromonitoring.com/api/forecast-weather)
 
 Reference: [Historical weather](https://agromonitoring.com/api/history-weather)
+
+#### Agro historical NDVI API 
+
+The Agro historical NDVI API provides for previously observed (historical) NDVI values for your polygons.
+
+Reference: [Historical NDVI API ](https://openweather.co.uk/blog/post/dive-agro-api-part-3-historical-ndvi-api)
+
+Reference: [Historical NDVI API by polygon ](https://agromonitoring.com/api/history-ndvi)
 
 ### Usage
 
@@ -88,6 +96,12 @@ See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an exam
 - getCurrentWeather(id: String, reponse: Binding\<Current>)
 - getForecastWeather(id: String, reponse: Binding\<[Current]>)
 - getHistoricalWeather(id: String, options: AgroWeatherOptions, reponse: Binding\<[Current]>)
+
+**Historical NDVI**
+
+- getHistoricalNDVI(id: String, reponse: Binding\<Current>)
+
+
 
 ### Installation
 
