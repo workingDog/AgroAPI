@@ -18,7 +18,7 @@ import SwiftUI
 open class AgroProvider {
     
     public let client: AgroClient
-    public var cancellable: AnyCancellable?
+    public var cancellables = Set<AnyCancellable>()
     
     public init(apiKey: String) {
         self.client = AgroClient(apiKey: apiKey)
@@ -42,7 +42,7 @@ open class AgroProvider {
     /// - closure completion: AgroPolyResponse
     open func createPoly(poly: AgroPolygon, completion: @escaping (AgroPolyResponse?) -> Void) {
         let jsonData = (try? JSONEncoder().encode(poly)) ?? Data()
-        cancellable = client.postThis(bodyData: jsonData)
+        client.postThis(bodyData: jsonData)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -52,7 +52,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
 
     /// get the specific Agro polygon info from the server
@@ -72,7 +72,7 @@ open class AgroProvider {
     /// - Parameter id: the id of the polygon to get
     /// - closure completion: AgroPolyResponse
     open func getPoly(id: String, completion: @escaping (AgroPolyResponse?) -> Void) {
-        cancellable = client.fetchThis(param: id)
+        client.fetchThis(param: id)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -82,7 +82,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     /// get the Agro polygon list from the server
@@ -100,7 +100,7 @@ open class AgroProvider {
     ///
     /// - closure completion: [AgroPolyResponse]
     open func getPolyList(completion: @escaping ([AgroPolyResponse]?) -> Void) {
-        cancellable = client.fetchThis(param: "")
+       client.fetchThis(param: "")
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -110,7 +110,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     /// delete the specific Agro polygon from the server
@@ -130,7 +130,7 @@ open class AgroProvider {
     /// - Parameter id: the id of the polygon to delete
     /// - closure completion: AgroPolyResponse
     open func deletePoly(id: String, completion: @escaping (AgroPolyResponse?) -> Void) {
-        cancellable = client.deleteThis(param: id)
+        client.deleteThis(param: id)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -140,7 +140,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     // update info for polygon   ---> todo
@@ -176,7 +176,7 @@ open class AgroProvider {
     /// - Parameter name: the new name of the polygon
     /// - closure completion: AgroPolyResponse
     open func updatePoly(id: String, name: String, completion: @escaping (AgroPolyResponse?) -> Void) {
-        cancellable = updateThis(id: id, name: name)
+        updateThis(id: id, name: name)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -186,7 +186,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
 
     /// get all available satellite imageries for the polygon and return the info
@@ -206,7 +206,7 @@ open class AgroProvider {
     /// - Parameter options: the options
     /// - closure completion: [AgroImagery]
     open func getImagery(options: AgroOptions, completion: @escaping ([AgroImagery]?) -> Void) {
-        cancellable = client.fetchThis(options: options)
+        client.fetchThis(options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -216,7 +216,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
 
     /// get the satellite imageries stats for the polygon
@@ -236,7 +236,7 @@ open class AgroProvider {
     /// - Parameter urlString: the url to fetch
     /// - closure completion: AgroStatsInfo
     open func getStatsInfo(urlString: String, completion: @escaping (AgroStatsInfo?) -> Void) {
-        cancellable = client.fetchThisUrl(urlString: urlString)
+        client.fetchThisUrl(urlString: urlString)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -246,7 +246,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
 
     /// get the satellite imageries tile data for the polygon
@@ -266,7 +266,7 @@ open class AgroProvider {
     /// - Parameter urlString: the url to fetch
     /// - closure completion: Data
     open func getTile(urlString: String, completion: @escaping (Data?) -> Void) {
-        cancellable = client.fetchThisData(urlString: urlString)
+        client.fetchThisData(urlString: urlString)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -276,7 +276,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     /// get the satellite imageries PNG image data for the polygon
@@ -297,7 +297,7 @@ open class AgroProvider {
     /// - closure completion: Data
     open func getPngImageData(urlString: String, paletteid: Int, completion: @escaping (Data?) -> Void) {
         let theUrl = urlString + "&paletteid=\(paletteid)"
-        cancellable = client.fetchThisData(urlString: theUrl)
+        client.fetchThisData(urlString: theUrl)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -307,7 +307,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     /// get the satellite imageries as a UIImage image for the polygon
@@ -386,7 +386,7 @@ open class AgroProvider {
     /// - Parameter param: the polygon id
     /// - closure completion: Current weather
     open func getCurrentWeather(id: String, completion: @escaping (Current?) -> Void) {
-        cancellable = client.fetchThisWeather(param: id, isForecast: false)
+        client.fetchThisWeather(param: id, isForecast: false)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -396,7 +396,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     /// get the current weather for the polygon
@@ -416,7 +416,7 @@ open class AgroProvider {
     /// - Parameter param: the polygon id
     /// - closure completion: Current weather
     open func getForecastWeather(id: String, completion: @escaping ([Current]?) -> Void) {
-        cancellable = client.fetchThisWeather(param: id, isForecast: true)
+        client.fetchThisWeather(param: id, isForecast: true)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -426,7 +426,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     open func getForecastWeather(id: String, reponse: Binding<[Current]>) {
@@ -442,7 +442,7 @@ open class AgroProvider {
     /// - Parameter param: the polygon id
     /// - closure completion: Current weather
     open func getHistoricalWeather(options: WeatherOptions, completion: @escaping ([Current]?) -> Void) {
-        cancellable = client.fetchThisWeather(param: options.polygon_id, isForecast: true, options: options)
+        client.fetchThisWeather(param: options.polygon_id, isForecast: true, options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -452,7 +452,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     open func getHistoricalWeather(options: WeatherOptions, reponse: Binding<[Current]>) {
@@ -468,7 +468,7 @@ open class AgroProvider {
     /// - Parameter options: options for the request
     /// - closure completion: historical NDVI
     open func getHistoricalNDVI(options: AgroOptions, completion: @escaping ([AgroHistoryNDVI]?) -> Void) {
-        cancellable = client.fetchThisHistory(options: options)
+        client.fetchThisHistory(options: options)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -478,7 +478,7 @@ open class AgroProvider {
                 }
             }, receiveValue: { resp in
                 return completion(resp)
-            })
+            }).store(in: &cancellables)
     }
     
     open func getHistoricalNDVI(options: AgroOptions, reponse: Binding<[AgroHistoryNDVI]>) {
@@ -487,6 +487,11 @@ open class AgroProvider {
                 reponse.wrappedValue = theHist
             }
         }
+    }
+    
+    open func clearCancellables() {
+        self.cancellables.forEach{ $0.cancel() }
+        self.cancellables = Set<AnyCancellable>()
     }
     
 }
