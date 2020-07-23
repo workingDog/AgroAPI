@@ -113,7 +113,7 @@ Include the files in the **./Sources/AgroApi** folder into your project or prefe
 Create a Package.swift file for your project and add a dependency to:
 
     dependencies: [
-      .package(url: "https://github.com/workingDog/AgroApi.git", from: "0.1.1")
+      .package(url: "https://github.com/workingDog/AgroApi.git", from: "0.1.2")
     ]
 
 #### Using Xcode
