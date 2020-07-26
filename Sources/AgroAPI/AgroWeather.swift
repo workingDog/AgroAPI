@@ -45,7 +45,7 @@ public struct Current: Codable {
 
     // convenience function
     public func getDate() -> Date {
-        return self.dt.dateFromUTC()
+        return Date(timeIntervalSince1970: TimeInterval(self.dt))
     }
     
     // convenience function
