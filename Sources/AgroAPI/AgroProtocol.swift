@@ -133,9 +133,33 @@ public class AgroOptions {
                 coverage_min: Double? = nil,
                 clouds_max: Double? = nil,
                 clouds_min: Double? = nil) {
+        
         self.polygon_id = polygon_id
         self.start = start
         self.end = end
+        
+        self.resolution_min = resolution_min
+        self.resolution_max = resolution_max
+        self.type = type
+        self.coverage_max = coverage_max
+        self.coverage_min = coverage_min
+        self.clouds_max = clouds_max
+        self.clouds_min = clouds_min
+    }
+    
+    public init(polygon_id: String, start: Date, end: Date,
+                resolution_min: Int? = nil,
+                resolution_max: Int? = nil,
+                type: String? = nil,
+                coverage_max: Double? = nil,
+                coverage_min: Double? = nil,
+                clouds_max: Double? = nil,
+                clouds_min: Double? = nil) {
+
+        self.polygon_id = polygon_id
+        self.start = Int(start.timeIntervalSince1970)
+        self.end = Int(end.timeIntervalSince1970)
+        
         self.resolution_min = resolution_min
         self.resolution_max = resolution_max
         self.type = type

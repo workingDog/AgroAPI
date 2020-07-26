@@ -58,8 +58,8 @@ using a set of simple asynchronous functions, for example:
         
         func loadData() {
            let options = AgroOptions(polygon_id: "5f45273c734b52667be0bb1e",
-                              start: Date().addingTimeInterval(-60*60*24*20).utc,
-                              end: Date().utc)
+                              start: Date().addingTimeInterval(-60*60*24*20),
+                              end: Date())
     
            agroProvider.getImagery(options: options) { imagery in
               if let sat = imagery?.first, let img = sat.image, let theUrl = img.ndvi {
