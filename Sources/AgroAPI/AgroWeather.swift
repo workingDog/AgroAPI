@@ -149,6 +149,12 @@ public class WeatherOptions {
         self.end = end
     }
     
+    public init(polygon_id: String, start: Date, end: Date) {
+        self.polygon_id = polygon_id
+        self.start = Int(start.timeIntervalSince1970)
+        self.end = Int(end.timeIntervalSince1970)
+    }
+    
     public func toParamString() -> String {
         var stringer = ""
         stringer += "polygon_id=" + polygon_id
