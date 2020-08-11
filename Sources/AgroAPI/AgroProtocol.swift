@@ -27,7 +27,7 @@ public struct Properties: Codable {
 }
 
 /// a server response to a AgroPolygon request
-public struct AgroPolyResponse: Codable {
+public struct AgroPolyResponse: Codable, Identifiable {
     public let id: String          // The internal ID of the polygon you get during creation (string)
     public let name: String        // The name of the polygon
     public let user_id: String     // the user id

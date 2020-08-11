@@ -3,6 +3,8 @@
 [**OpenWeather Agro API**](https://agromonitoring.com/) brings satellite images to farmers. 
 "Through our simple and fast API, you can easily get multi-spectrum images of the crop for the most recent day or for a day in the past; we have the most useful images for agriculture such as NDVI, EVI, True Color and False Color."
 
+The concept in using **Agro API** satellite imagery is to first create one or more polygons representing for example, agricultural crop fields or forestry areas. Once the polygons are setup, satellite images such as; true color, false color, NDVI, EVI etc... can be retrieved from the **Argo API server** for those polygons and displayed on the map. Those images are used to estimate the amount and health of the vegetation and crop development over time in those polygons.
+
 **AgroApi** is a small Swift library to connect to the [**OpenWeather Agro API**](https://agromonitoring.com/api) and retrieve the chosen data. Made easy to use with SwiftUI.
 
 Includes, the Polygons, Weather, Satellite Imagery and Historical NDVI APIs.

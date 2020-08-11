@@ -116,19 +116,14 @@ open class AgroProvider {
     /// delete the specific Agro polygon from the server
     ///
     /// - Parameter id: the id of the polygon to delete
-    /// - Binding reponse: AgroPolyResponse
-    open func deletePoly(id: String, reponse: Binding<AgroPolyResponse>) {
-        deletePoly(id: id) { resp in
-            if let theResponse = resp {
-                reponse.wrappedValue = theResponse
-            }
-        }
+    open func deletePoly(id: String) {
+        deletePoly(id: id) { _ in }
     }
     
     /// delete the specific Agro polygon from the server
     ///
     /// - Parameter id: the id of the polygon to delete
-    /// - closure completion: AgroPolyResponse
+    /// - closure completion: expect a nil AgroPolyResponse when successful
     open func deletePoly(id: String, completion: @escaping (AgroPolyResponse?) -> Void) {
         client.deleteThis(param: id)
             .sink(receiveCompletion: { completion in
