@@ -71,7 +71,12 @@ using a set of simple asynchronous functions, for example:
        }
     }
    
-See [*AgroApiExample*](https://github.com/workingDog/AgroApiExample) for an example use.
+For example use, see:
+
+-    [**AgroDonkey**](https://github.com/workingDog/AgroDonkey)
+
+-    [*AgroApiExample*](https://github.com/workingDog/AgroApiExample)
+
 
 **AgroProvider** has the following asynchronous functions, together with their equivalent callback methods:
 
