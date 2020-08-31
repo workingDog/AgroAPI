@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// geojson Feature
 public struct Feature: Codable {
     public let type: String

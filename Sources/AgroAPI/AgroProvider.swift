@@ -9,6 +9,11 @@ import Foundation
 import Combine
 import SwiftUI
 
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import AppKit
+#endif
 
 /// provides access to the Agro API, for both Polygons and Satellite imagery API
 ///
@@ -305,10 +310,11 @@ open class AgroProvider {
             }).store(in: &cancellables)
     }
     
-    /// get the satellite imageries as a UIImage image for the polygon
+    /// get the satellite imageries as a UIImage/NSImage image for the polygon
     ///
     /// - Parameter urlString: the url to fetch
-    /// - Binding reponse: UIImage
+    /// - Binding reponse: UIImage/NSImage
+    #if os(iOS)
     open func getPngUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>) {
         getPngUIImage(urlString: urlString, paletteid: paletteid) { img in
             if let uimg = img {
@@ -316,11 +322,21 @@ open class AgroProvider {
             }
         }
     }
-    
-    /// get the satellite imageries as a UIImage image for the polygon
+    #elseif os(OSX)
+    open func getPngUIImage(urlString: String, paletteid: Int, reponse: Binding<NSImage>) {
+        getPngNSImage(urlString: urlString, paletteid: paletteid) { img in
+            if let uimg = img {
+                reponse.wrappedValue = uimg
+            }
+        }
+    }
+    #endif
+
+    /// get the satellite imageries as a UIImage/NSImage image for the polygon
     ///
     /// - Parameter urlString: the url to fetch
     /// - closure completion: UIImage
+    #if os(iOS)
     open func getPngUIImage(urlString: String, paletteid: Int, completion: @escaping (UIImage?) -> Void) {
         getPngImageData(urlString: urlString, paletteid: paletteid) { data in
             if let imgData = data, let uimg = UIImage(data: imgData) {
@@ -328,6 +344,15 @@ open class AgroProvider {
             }
         }
     }
+    #elseif os(OSX)
+    open func getPngNSImage(urlString: String, paletteid: Int, completion: @escaping (NSImage?) -> Void) {
+        getPngImageData(urlString: urlString, paletteid: paletteid) { data in
+            if let imgData = data, let uimg = NSImage(data: imgData) {
+                return completion(uimg)
+            }
+        }
+    }
+    #endif
 
     /// get the satellite imageries of a GeoTiff image data for the polygon
     ///
@@ -351,10 +376,11 @@ open class AgroProvider {
         }
     }
     
-    /// get the satellite imageries of a GeoTiff image as UIImage for the polygon
+    /// get the satellite imageries of a GeoTiff image as UIImage/NSImage for the polygon
     ///
     /// - Parameter urlString: the url to fetch
-    /// - closure completion: UIImage
+    /// - closure completion: UIImage/NSImage
+    #if os(iOS)
     open func getGeoTiffUIImage(urlString: String, paletteid: Int, completion: @escaping (UIImage?) -> Void) {
         getGeoTiffData(urlString: urlString, paletteid: paletteid) { data in
             if let imgData = data, let uimg = UIImage(data: imgData) {
@@ -363,11 +389,22 @@ open class AgroProvider {
             return completion(nil)
         }
     }
-    
-    /// get the satellite imageries of a GeoTiff image as UIImage for the polygon
+    #elseif os(OSX)
+    open func getGeoTiffNSImage(urlString: String, paletteid: Int, completion: @escaping (NSImage?) -> Void) {
+        getGeoTiffData(urlString: urlString, paletteid: paletteid) { data in
+            if let imgData = data, let uimg = NSImage(data: imgData) {
+                return completion(uimg)
+            }
+            return completion(nil)
+        }
+    }
+    #endif
+
+    /// get the satellite imageries of a GeoTiff image as UIImage/NSImage for the polygon
     ///
     /// - Parameter urlString: the url to fetch
     /// - Binding reponse: UIImage
+    #if os(iOS)
     open func getGeoTiffUIImage(urlString: String, paletteid: Int, reponse: Binding<UIImage>) {
         getGeoTiffUIImage(urlString: urlString, paletteid: paletteid) { img in
             if let theImg = img {
@@ -375,6 +412,15 @@ open class AgroProvider {
             }
         }
     }
+    #elseif os(OSX)
+    open func getGeoTiffNSImage(urlString: String, paletteid: Int, reponse: Binding<NSImage>) {
+        getGeoTiffNSImage(urlString: urlString, paletteid: paletteid) { img in
+            if let theImg = img {
+                reponse.wrappedValue = theImg
+            }
+        }
+    }
+    #endif
 
     /// get the current weather for the polygon
     ///
